@@ -1,15 +1,15 @@
+// components/Navbar.jsx
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-export default function Navbar() {
+export default function Navbar({ onMenuPress }) {
   return (
     <View style={styles.navbar}>
-      <Image
-        source={require('../assets/icon.png')}
-        style={styles.logo}
-      />
+      <TouchableOpacity onPress={onMenuPress}>
+        <Ionicons name="menu" size={28} color="white" />
+      </TouchableOpacity>
       <Text style={styles.title}>SafeHands</Text>
-      <Text style={styles.menu}>≡</Text>
     </View>
   );
 }
@@ -18,22 +18,14 @@ const styles = StyleSheet.create({
   navbar: {
     height: 60,
     backgroundColor: '#007ac2',
+    paddingHorizontal: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 15,
-  },
-  logo: {
-    width: 30,
-    height: 30,
   },
   title: {
-    fontSize: 20,
     color: 'white',
-    fontWeight: '600',
-  },
-  menu: {
-    color: 'white',
-    fontSize: 24,
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginLeft: 20,
   },
 });
