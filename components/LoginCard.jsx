@@ -1,4 +1,3 @@
-// components/LoginCard.jsx
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -7,6 +6,12 @@ export default function LoginCard() {
   const navigation = useNavigation();
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
+
+  const handleLogin = () => {
+    // Acá podrías validar el login
+    console.log('Usuario:', user, 'Password:', password);
+    // navigation.navigate('Home'); // si hay una vista principal
+  };
 
   return (
     <View style={styles.card}>
@@ -31,7 +36,7 @@ export default function LoginCard() {
         placeholderTextColor="#aaa"
       />
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Iniciar sesión</Text>
       </TouchableOpacity>
 
@@ -58,6 +63,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 20,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   label: {
     color: 'white',
@@ -77,6 +83,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
+    fontWeight: 'bold',
   },
   registerButton: {
     marginTop: 10,
@@ -89,5 +96,6 @@ const styles = StyleSheet.create({
     color: '#d0eaff',
     marginTop: 10,
     fontSize: 12,
+    textAlign: 'center',
   },
 });

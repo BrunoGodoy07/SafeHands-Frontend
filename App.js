@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
-import { View } from 'react-native';
-import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
+// App.js
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './screens/LoginScreen';
+import RegisterScreen from './screens/RegisterScreen';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [sidebarVisible, setSidebarVisible] = useState(false);
-
   return (
-    <View style={{ flex: 1 }}>
-      <Navbar onMenuPress={() => setSidebarVisible(true)} />
-      {sidebarVisible && <Sidebar onClose={() => setSidebarVisible(false)} />}
-      <LoginScreen />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Register" component={RegisterScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
