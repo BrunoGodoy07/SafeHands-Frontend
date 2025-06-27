@@ -46,15 +46,18 @@ const styles = StyleSheet.create({
   loginBox: {
     backgroundColor: '#0568a7',
     borderRadius: 12,
-    padding: 24,
+    paddingHorizontal: 32,      // ¡Más ancho!
+    paddingVertical: 32,
     width: '100%',
-    maxWidth: 340,
+    maxWidth: 380,              // ¡Más ancho!
+    minHeight: 390,
     alignSelf: 'flex-start',
+    justifyContent: 'center',
   },
   boxTitle: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: 20,
     marginBottom: 14,
     textAlign: 'center',
   },
