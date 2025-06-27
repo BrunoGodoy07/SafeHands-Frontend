@@ -7,16 +7,9 @@ export default function LoginCard() {
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    // Acá podrías validar el login
-    console.log('Usuario:', user, 'Password:', password);
-    // navigation.navigate('Home'); // si hay una vista principal
-  };
-
   return (
-    <View style={styles.card}>
-      <Text style={styles.title}>Log In Manual</Text>
-
+    <View style={styles.loginBox}>
+      <Text style={styles.boxTitle}>Log In Manual</Text>
       <Text style={styles.label}>Usuario</Text>
       <TextInput
         style={styles.input}
@@ -25,77 +18,85 @@ export default function LoginCard() {
         placeholder="UserAdmin"
         placeholderTextColor="#aaa"
       />
-
       <Text style={styles.label}>Contraseña</Text>
       <TextInput
         style={styles.input}
-        secureTextEntry
         value={password}
         onChangeText={setPassword}
         placeholder="Ingrese su contraseña"
         placeholderTextColor="#aaa"
+        secureTextEntry
       />
-
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Iniciar sesión</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.registerButton} onPress={() => navigation.navigate('Register')}>
-        <Text style={styles.registerText}>Registrarse</Text>
-      </TouchableOpacity>
-
+      <View style={styles.buttonRow}>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Iniciar sesión</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Register')}>
+          <Text style={styles.buttonText}>Registrarse</Text>
+        </TouchableOpacity>
+      </View>
       <TouchableOpacity>
-        <Text style={styles.forgotText}>¿Olvidaste tu contraseña?</Text>
+        <Text style={styles.link}>¿Olvidaste tu contraseña?</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  card: {
-    width: '45%',
-    padding: 20,
-    backgroundColor: '#006bb3',
-    borderRadius: 10,
+  loginBox: {
+    backgroundColor: '#0568a7',
+    borderRadius: 12,
+    padding: 24,
+    width: '100%',
+    maxWidth: 340,
+    alignSelf: 'flex-start',
   },
-  title: {
-    color: 'white',
-    fontSize: 20,
-    marginBottom: 20,
+  boxTitle: {
+    color: '#fff',
     fontWeight: 'bold',
+    fontSize: 18,
+    marginBottom: 14,
     textAlign: 'center',
   },
   label: {
-    color: 'white',
-    marginBottom: 5,
+    color: '#fff',
+    marginBottom: 4,
+    marginTop: 8,
+    fontWeight: '500'
   },
   input: {
-    backgroundColor: '#ccc',
+    backgroundColor: '#eaeaea',
     borderRadius: 20,
     padding: 10,
-    marginBottom: 15,
+    marginBottom: 8,
+    fontSize: 16,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 12,
+    marginBottom: 8,
+    gap: 8
   },
   button: {
-    backgroundColor: '#005599',
-    padding: 10,
-    borderRadius: 10,
-    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    flex: 1,
+    marginHorizontal: 2,
   },
   buttonText: {
-    color: 'white',
+    color: '#027dc1',
     fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 16
   },
-  registerButton: {
-    marginTop: 10,
-    alignItems: 'center',
-  },
-  registerText: {
-    color: '#ddd',
-  },
-  forgotText: {
+  link: {
     color: '#d0eaff',
-    marginTop: 10,
     fontSize: 12,
     textAlign: 'center',
-  },
+    marginTop: 7,
+    textDecorationLine: 'underline',
+  }
 });

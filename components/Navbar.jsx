@@ -1,31 +1,54 @@
-// components/Navbar.jsx
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 
 export default function Navbar({ onMenuPress }) {
   return (
     <View style={styles.navbar}>
-      <TouchableOpacity onPress={onMenuPress}>
-        <Ionicons name="menu" size={28} color="white" />
-      </TouchableOpacity>
+      <Image source={require('../assets/icon.svg')} style={styles.logo} />
       <Text style={styles.title}>SafeHands</Text>
+      <TouchableOpacity style={styles.hamburger} onPress={onMenuPress}>
+        {/* Dibuja las 3 rayas como en el prototipo */}
+        <View style={styles.bar} />
+        <View style={styles.bar} />
+        <View style={styles.bar} />
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   navbar: {
-    height: 60,
-    backgroundColor: '#007ac2',
-    paddingHorizontal: 20,
+    height: 48,
+    backgroundColor: '#0b7ec2',
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 12,
+  },
+  logo: {
+    width: 34,
+    height: 34,
+    resizeMode: 'contain',
   },
   title: {
     color: 'white',
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginLeft: 20,
+    fontSize: 24,
+    fontWeight: '400',
+    flex: 1,
+    textAlign: 'center',
+    marginLeft: -34, // Centrado real pese al logo
+  },
+  hamburger: {
+    width: 36,
+    height: 36,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  bar: {
+    width: 26,
+    height: 3,
+    backgroundColor: '#fff',
+    marginVertical: 2,
+    borderRadius: 2,
   },
 });
