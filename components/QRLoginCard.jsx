@@ -1,108 +1,80 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Platform, Modal } from 'react-native';
 import { Camera } from 'expo-camera';
 
-const QRLoginCard = () => {
-  const videoRef = useRef(null);
-  const [error, setError] = useState('');
-  const [streaming, setStreaming] = useState(false);
+const cameraOptions = [
+  { label: 'Cámara trasera', value: Camera.Constants.Type.back },
+  { label: 'Cámara frontal', value: Camera.Constants.Type.front }
+];
 
-  // Expo Camera state
+const QRLoginCard = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
+  const [menuVisible, setMenuVisible] = useState(false);
 
-  // Pedir permisos solo en móvil
   useEffect(() => {
-    if (Platform.OS !== 'web') {
-      (async () => {
-        const { status } = await Camera.requestCameraPermissionsAsync();
-        setHasPermission(status === 'granted');
-        setType(Camera.Constants.Type.back);
-      })();
-    }
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
   }, []);
 
-  // Para web: inicializar la cámara y reproducir en <video>
-  useEffect(() => {
-    let streamObj;
-    if (Platform.OS === 'web') {
-      async function enableCamera() {
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-          try {
-            streamObj = await navigator.mediaDevices.getUserMedia({
-              video: { facingMode: 'environment', width: 320, height: 320 }
-            });
-            if (videoRef.current) {
-              videoRef.current.srcObject = streamObj;
-              videoRef.current.onloadedmetadata = () => {
-                videoRef.current
-                  .play()
-                  .then(() => setStreaming(true))
-                  .catch(() => setError('Haz click sobre la cámara para activarla.'));
-              };
-            }
-          } catch (err) {
-            setError('No se pudo acceder a la cámara.');
-            setStreaming(false);
-          }
-        } else {
-          setError('Este navegador no soporta cámara.');
-          setStreaming(false);
-        }
-      }
-      enableCamera();
-    }
-    return () => {
-      if (Platform.OS === 'web' && streamObj) {
-        streamObj.getTracks().forEach((track) => track.stop());
-      }
-    };
-  }, []);
+  if (Platform.OS === 'web') {
+    return (
+      <View style={styles.qrBox}>
+        <Text style={styles.qrTitle}>La cámara no es compatible en web</Text>
+      </View>
+    );
+  }
 
-  function handleManualPlay() {
-    if (Platform.OS === 'web' && videoRef.current) {
-      videoRef.current.play();
-    }
+  if (hasPermission === null) {
+    return (
+      <View style={styles.qrBox}>
+        <Text style={styles.qrTitle}>Solicitando permiso de cámara...</Text>
+      </View>
+    );
+  }
+  if (hasPermission === false) {
+    return (
+      <View style={styles.qrBox}>
+        <Text style={styles.qrTitle}>Permiso de cámara denegado</Text>
+      </View>
+    );
   }
 
   return (
     <View style={styles.qrBox}>
-      <Text style={styles.qrTitle}>Escanee Su código QR</Text>
-      <View style={styles.qrContent}>
-        <View style={styles.videoWrapper} onClick={handleManualPlay}>
-          {Platform.OS === 'web' ? (
-            <video
-              ref={videoRef}
-              style={styles.video}
-              playsInline
-              autoPlay
-              muted
-              width={320}
-              height={320}
-            />
-          ) : (
-            hasPermission === null ? (
-              <Text style={{ color: '#fff' }}>Solicitando permiso de cámara...</Text>
-            ) : hasPermission === false ? (
-              <Text style={{ color: '#fff' }}>Permiso de cámara denegado</Text>
-            ) : (
-              <Camera
-                style={styles.video}
-                type={type}
-                ratio="1:1"
-              />
-            )
-          )}
-        </View>
-        <View style={styles.qrLabelBox}>
-          <Text style={styles.qrLabel}>DR Gonzalez</Text>
-          <Text style={styles.qrLabelSub}>Cirujano Plástico</Text>
-        </View>
-        {error ? <Text style={{ color: '#fff', marginTop: 8 }}>{error}</Text> : null}
+      <View style={styles.headerRow}>
+        <Text style={styles.qrTitle}>Escanee Su código QR</Text>
+        <TouchableOpacity style={styles.menuBtn} onPress={() => setMenuVisible(true)}>
+          <Text style={styles.menuBtnText}>︙</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.retryBtn} onPress={() => Platform.OS === 'web' ? window.location.reload() : null}>
-        <Text style={styles.retryText}>Reintentar</Text>
-      </TouchableOpacity>
+      <Camera style={styles.video} type={type} ratio="1:1" />
+      <Text style={styles.qrLabel}>DR Gonzalez{"\n"}Cirujano Plástico</Text>
+      <Modal
+        visible={menuVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setMenuVisible(false)}
+      >
+        <TouchableOpacity style={styles.modalOverlay} onPress={() => setMenuVisible(false)}>
+          <View style={styles.modalMenu}>
+            {cameraOptions.map(opt => (
+              <TouchableOpacity
+                key={opt.value}
+                style={styles.modalMenuItem}
+                onPress={() => {
+                  setType(opt.value);
+                  setMenuVisible(false);
+                }}
+              >
+                <Text style={styles.modalMenuItemText}>{opt.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </View>
   );
 };
@@ -115,63 +87,63 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 340,
     alignItems: 'center',
-    alignSelf: 'flex-end',
     minHeight: 390,
     position: 'relative'
   },
+  headerRow: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8
+  },
   qrTitle: {
     color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 18,
-    marginBottom: 14,
-    textAlign: 'center'
+    fontSize: 20,
+    fontWeight: 'bold'
   },
-  qrContent: {
-    alignItems: 'center'
-  },
-  videoWrapper: {
-    width: 320,
-    height: 320,
-    backgroundColor: '#035fa3',
+  menuBtn: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
     borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 8,
-    overflow: 'hidden',
-    cursor: 'pointer'
+    backgroundColor: '#ffffff22'
+  },
+  menuBtnText: {
+    fontSize: 28,
+    color: '#fff'
   },
   video: {
-    width: '100%',
-    height: '100%',
-    objectFit: Platform.OS === 'web' ? 'cover' : undefined,
-    backgroundColor: '#035fa3',
-    borderRadius: 10,
-  },
-  qrLabelBox: {
-    alignItems: 'center',
-    marginTop: 4,
+    width: 320,
+    height: 320,
+    borderRadius: 12,
     marginBottom: 10
   },
   qrLabel: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    color: '#222'
-  },
-  qrLabelSub: {
-    fontSize: 14,
-    color: '#222'
-  },
-  retryBtn: {
-    backgroundColor: '#6ecf2b',
-    borderRadius: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 24,
-    marginTop: 8
-  },
-  retryText: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 16
+    fontSize: 16,
+    marginTop: 10,
+    textAlign: 'center'
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: '#0008',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  modalMenu: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 12,
+    minWidth: 180
+  },
+  modalMenuItem: {
+    paddingVertical: 10,
+    paddingHorizontal: 5
+  },
+  modalMenuItemText: {
+    fontSize: 16,
+    color: '#0568a7'
   }
 });
 

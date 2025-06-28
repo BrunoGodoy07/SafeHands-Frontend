@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, ActivityIndicator, Text } from 'react-native';
 import { Camera, useCameraDevices } from 'react-native-vision-camera';
+import { Camera } from 'expo-camera';
 
 export default function CameraQR() {
   const [permission, setPermission] = useState(null);
