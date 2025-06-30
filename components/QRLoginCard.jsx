@@ -1,46 +1,9 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Platform, Modal } from 'react-native';
-import { Camera } from 'expo-camera';
-
-const cameraOptions = [
-  { label: 'Cámara trasera', value: Camera.Constants.Type.back },
-  { label: 'Cámara frontal', value: Camera.Constants.Type.front }
-];
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 
 const QRLoginCard = () => {
-  const [hasPermission, setHasPermission] = useState(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
-  const [menuVisible, setMenuVisible] = useState(false);
-
-  useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
-  }, []);
-
-  if (Platform.OS === 'web') {
-    return (
-      <View style={styles.qrBox}>
-        <Text style={styles.qrTitle}>La cámara no es compatible en web</Text>
-      </View>
-    );
-  }
-
-  if (hasPermission === null) {
-    return (
-      <View style={styles.qrBox}>
-        <Text style={styles.qrTitle}>Solicitando permiso de cámara...</Text>
-      </View>
-    );
-  }
-  if (hasPermission === false) {
-    return (
-      <View style={styles.qrBox}>
-        <Text style={styles.qrTitle}>Permiso de cámara denegado</Text>
-      </View>
-    );
-  }
+  // Si quieres mantener el menú, puedes dejar el estado del modal
+  const [menuVisible, setMenuVisible] = React.useState(false);
 
   return (
     <View style={styles.qrBox}>
@@ -50,8 +13,10 @@ const QRLoginCard = () => {
           <Text style={styles.menuBtnText}>︙</Text>
         </TouchableOpacity>
       </View>
-      <Camera style={styles.video} type={type} ratio="1:1" />
-      <Text style={styles.qrLabel}>DR Gonzalez{"\n"}Cirujano Plástico</Text>
+      {/* Aquí solo queda el cuadro, puedes agregar un placeholder o un diseño visual */}
+      <View style={styles.placeholderBox}>
+        <Text style={styles.placeholderText}>[ Aquí va el QR ]</Text>
+      </View>
       <Modal
         visible={menuVisible}
         transparent={true}
@@ -60,18 +25,12 @@ const QRLoginCard = () => {
       >
         <TouchableOpacity style={styles.modalOverlay} onPress={() => setMenuVisible(false)}>
           <View style={styles.modalMenu}>
-            {cameraOptions.map(opt => (
-              <TouchableOpacity
-                key={opt.value}
-                style={styles.modalMenuItem}
-                onPress={() => {
-                  setType(opt.value);
-                  setMenuVisible(false);
-                }}
-              >
-                <Text style={styles.modalMenuItemText}>{opt.label}</Text>
-              </TouchableOpacity>
-            ))}
+            <TouchableOpacity
+              style={styles.modalMenuItem}
+              onPress={() => setMenuVisible(false)}
+            >
+              <Text style={styles.modalMenuItemText}>Cerrar</Text>
+            </TouchableOpacity>
           </View>
         </TouchableOpacity>
       </Modal>
@@ -83,7 +42,7 @@ const styles = StyleSheet.create({
   qrBox: {
     backgroundColor: '#0568a7',
     borderRadius: 12,
-    padding: 24,
+    padding: 1,
     width: '100%',
     maxWidth: 340,
     alignItems: 'center',
@@ -100,23 +59,35 @@ const styles = StyleSheet.create({
   qrTitle: {
     color: '#fff',
     fontSize: 20,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    marginLeft: '18%',
+    marginTop: '5%'
   },
   menuBtn: {
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 10,
+    borderRadius: 7,
     backgroundColor: '#ffffff22'
   },
   menuBtnText: {
-    fontSize: 28,
+    fontSize: 20,
     color: '#fff'
   },
-  video: {
+  // Cuadro placeholder para el QR
+  placeholderBox: {
     width: 320,
-    height: 320,
+    height: 300,
     borderRadius: 12,
-    marginBottom: 10
+    backgroundColor: '#e0e0e0',
+    marginBottom: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 15,
+  },
+  placeholderText: {
+    color: '#aaa',
+    fontWeight: 'bold',
+    fontSize: 18
   },
   qrLabel: {
     color: '#fff',
