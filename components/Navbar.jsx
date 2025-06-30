@@ -18,7 +18,7 @@ export default function Navbar({ onMenuPress }) {
 
 const styles = StyleSheet.create({
   navbar: {
-    height: 48,
+    height: 60,
     backgroundColor: '#0b7ec2',
     flexDirection: 'row',
     alignItems: 'center',
@@ -26,8 +26,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   logo: {
-    width: 34,
-    height: 34,
+    width: 40,
+    height: 40,
     resizeMode: 'contain',
   },
   title: {
@@ -39,8 +39,8 @@ const styles = StyleSheet.create({
     marginLeft: -34, // Centrado real pese al logo
   },
   hamburger: {
-    width: 36,
-    height: 36,
+    width: 40,
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
   },

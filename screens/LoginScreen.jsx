@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, View, Text, StyleSheet } from 'react-native';
 import Navbar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
 import LoginCard from '../components/LoginCard';
 import QRLoginCard from '../components/QRLoginCard';
 
 export default function LoginScreen() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <SafeAreaView style={styles.container}>
-      <Navbar />
+      <Navbar onMenuPress={() => setSidebarOpen(true)} />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <View style={styles.centerBox}>
         <Text style={styles.mainTitle}>Inicio de sesión</Text>
         <View style={styles.loginRow}>
@@ -32,7 +36,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: '#0582c2',
     borderRadius: 16,
-    marginTop: 50,
+    marginTop: 100,
     paddingVertical: 32,
     paddingHorizontal: 24,
     alignItems: 'center',

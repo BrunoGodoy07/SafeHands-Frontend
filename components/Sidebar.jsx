@@ -1,56 +1,147 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Animated, Dimensions, Easing, Image } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-export default function Sidebar({ onClose }) {
+const SIDEBAR_WIDTH = 350; // 350px de ancho para tablet
+
+export default function Sidebar({ isOpen, onClose }) {
+  const screenWidth = Dimensions.get('window').width;
+  const slideAnim = React.useRef(new Animated.Value(screenWidth)).current;
+
+  React.useEffect(() => {
+    Animated.timing(slideAnim, {
+      toValue: isOpen ? screenWidth - SIDEBAR_WIDTH : screenWidth,
+      duration: 380,
+      easing: Easing.out(Easing.cubic),
+      useNativeDriver: false,
+    }).start();
+  }, [isOpen, screenWidth]);
+
+  if (!isOpen) return null;
+
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Image source={require('../assets/logo.png')} style={styles.logo} />
-        <Text style={styles.title}>SafeHands</Text>
-        <TouchableOpacity onPress={onClose}>
-          <Text style={styles.close}>×</Text>
+    <View style={styles.overlay}>
+      <TouchableOpacity style={styles.overlayTouchable} activeOpacity={1} onPress={onClose} />
+      <Animated.View style={[
+        styles.sidebar,
+        {
+          width: SIDEBAR_WIDTH,
+          right: 0,
+          position: 'absolute',
+          height: '100%',
+          transform: [{ translateX: Animated.subtract(slideAnim, screenWidth - SIDEBAR_WIDTH) }]
+        }
+      ]}>
+        <View style={styles.header}>
+        <View style={styles.logoContainer}>
+          <Image source={require('../assets/icon.svg')} style={styles.logoImage} />
+          <Text style={styles.logoText}>SafeHands</Text>
+        </View>
+          <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
+            <Ionicons name="close" size={36} color="white" />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.menu}>
+          <TouchableOpacity style={styles.menuItem}>
+            <Text style={styles.itemText}>Dashboard</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem}>
+            <Text style={styles.itemText}>ABM Usuarios</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem}>
+            <Text style={styles.itemText}>Reproducción de lavados</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem}>
+            <Text style={styles.itemText}>Reportes por usuario</Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity style={styles.logoutBtn}>
+          <Text style={styles.logoutText}>Cerrar Sesión</Text>
         </TouchableOpacity>
-      </View>
-      <View style={styles.menu}>
-        <Text style={styles.menuItem}>Dashboard</Text>
-        <Text style={styles.menuItem}>ABM Usuarios</Text>
-        <Text style={styles.menuItem}>Reproducción de lavados</Text>
-        <Text style={styles.menuItem}>Reportes por usuario</Text>
-      </View>
-      <TouchableOpacity style={styles.logoutBtn}>
-        <Text style={styles.logoutText}>Cerrar Sesión</Text>
-      </TouchableOpacity>
+      </Animated.View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    width: 300,
-    height: '100%',
-    backgroundColor: '#0b7ec2',
-    padding: 18,
-    paddingTop: 30,
-    borderTopRightRadius: 12,
-    borderBottomRightRadius: 12,
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+    zIndex: 100,
+    flexDirection: 'row',
+  },
+  overlayTouchable: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.22)',
+  },
+  sidebar: {
+    backgroundColor: '#0066A2',
+    paddingVertical: 40,
+    paddingHorizontal: 32,
+    shadowColor: '#000',
+    shadowOpacity: 0.22,
+    shadowOffset: { width: -8, height: 0 },
+    elevation: 14,
+    zIndex: 101,
+    borderTopLeftRadius: 32,
+    borderBottomLeftRadius: 32,
     justifyContent: 'flex-start',
   },
   header: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 18,
+    marginBottom: 48,
   },
-  logo: { width: 34, height: 34, marginRight: 10, resizeMode: 'contain' },
-  title: { color: '#fff', fontSize: 20, fontWeight: '600', flex: 1 },
-  close: { color: '#fff', fontSize: 30, paddingHorizontal: 8 },
-  menu: { marginVertical: 18 },
-  menuItem: { color: '#fff', fontSize: 18, marginVertical: 12 },
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  logoImage: {
+    width: 40,    // o el tamaño que desees
+    height: 40,
+    marginRight: 12,
+  },
+  logoText: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold',
+    letterSpacing: 1.2,
+  },
+  closeBtn: {
+    marginLeft: 15,
+    padding: 2,
+  },
+  menu: {
+    marginBottom: 64,
+  },
+  menuItem: {
+    paddingVertical: 22,
+    paddingHorizontal: 10,
+    borderBottomWidth: 1.2,
+    borderBottomColor: '#ffffff28',
+  },
+  itemText: {
+    color: 'white',
+    fontSize: 23,
+    fontWeight: 'bold',
+    letterSpacing: 0.7,
+  },
   logoutBtn: {
-    backgroundColor: '#d03b3b',
-    borderRadius: 7,
-    paddingVertical: 10,
+    marginTop: 'auto',
+    backgroundColor: '#C62828',
+    paddingVertical: 18,
+    borderRadius: 12,
     alignItems: 'center',
-    marginTop: 40,
+    marginBottom: 12,
   },
-  logoutText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
+  logoutText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 22,
+    letterSpacing: 0.8,
+  },
 });
