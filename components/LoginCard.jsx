@@ -7,6 +7,7 @@ export default function LoginCard() {
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
 
+    
   return (
     <View style={styles.loginBox}>
       <Text style={styles.boxTitle}>Log In Manual</Text>
@@ -28,9 +29,10 @@ export default function LoginCard() {
         secureTextEntry
       />
       <View style={styles.buttonRow}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Iniciar sesión</Text>
-        </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Authenticating')}>
+      <Text style={styles.buttonText}>Iniciar sesión</Text>
+      </TouchableOpacity>
+
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Register')}>
           <Text style={styles.buttonText}>Registrarse</Text>
         </TouchableOpacity>

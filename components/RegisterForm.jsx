@@ -11,9 +11,10 @@ export default function RegisterForm() {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleRegister = () => {
-    // TODO: lógica de registro
     console.log({ nombre, correo, password, confirmPassword });
+    navigation.navigate('Authenticating');
   };
+  
 
   return (
     <View style={styles.card}>
