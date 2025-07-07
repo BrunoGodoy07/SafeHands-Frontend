@@ -40,6 +40,14 @@ export default function LoginCard() {
       <TouchableOpacity>
         <Text style={styles.link}>¿Olvidaste tu contraseña?</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity
+  style={[styles.button, { marginTop: 10, backgroundColor: '#36B37E' }]}
+  onPress={() => navigation.navigate('Paso')}
+>
+  <Text style={[styles.buttonText, { color: 'white' }]}>Ir directo a PasoScreen</Text>
+</TouchableOpacity>
+
     </View>
   );
 }
