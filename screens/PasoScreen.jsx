@@ -9,7 +9,7 @@ const PasoScreen = () => (
     {/* Header */}
     <View style={styles.header}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Image source={require('../assets/logo.png')} style={{ height: 32, width: 32, marginRight: 10 }} />
+        <Image source={require('../assets/icon.svg')} style={{ height: 32, width: 32, marginRight: 10 }} />
         <Text style={styles.headerText}>SafeHands</Text>
       </View>
       <TouchableOpacity style={styles.abandonarBtn}>
@@ -28,7 +28,7 @@ const PasoScreen = () => (
       />
       <View style={styles.videosRow}>
         <View style={{ flex: 1, marginRight: 10 }}>
-          <VideoAutoplay source={require('../assets/paso1.mp4')} />
+          <VideoAutoplay source={require('../assets/videos/videoLavado.mp4')} />
         </View>
         <View style={{ flex: 1, marginLeft: 10 }}>
           <LiveVideoPlaceholder />
