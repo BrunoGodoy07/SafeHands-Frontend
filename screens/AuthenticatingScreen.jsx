@@ -1,32 +1,61 @@
 import React, { useEffect } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Navbar from '../components/Navbar';
+import CircleSpinner from '../components/CircleSpinner';
 
 export default function AuthenticatingScreen() {
   const navigation = useNavigation();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.replace('Success');  
+      navigation.replace('Success');
     }, 2000);
-
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>SafeHands</Text>
-      <View style={styles.card}>
-        <Text style={styles.text}>Autenticando...</Text>
-        <ActivityIndicator size="large" color="#000" />
+    <View style={styles.safe}>
+      <Navbar style={styles.nav}/>
+      <View style={styles.cardBox}>
+        <Text style={styles.title}>Autenticando...</Text>
+        <CircleSpinner size={110} color="#005a99" />
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#004d99', justifyContent: 'center', alignItems: 'center' },
-  title: { color: 'white', fontSize: 20, position: 'absolute', top: 50 },
-  card: { width: 250, height: 200, backgroundColor: '#007ACC', borderRadius: 10, justifyContent: 'center', alignItems: 'center' },
-  text: { color: 'white', marginBottom: 20 },
+  safe: {
+    flex: 1,
+    backgroundColor: '#fff', // Fondo blanco como en la imagen
+    alignItems: 'center',
+    justifyContent: 'flex-start'
+  },
+  nav: {
+    flex: 1,
+  },
+  cardBox: {
+    marginTop: '6%',
+    width: '70%',
+    height: '55%',
+    backgroundColor: '#0582c2',
+    borderRadius: 10,
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+  },
+  title: {
+    color: '#fff',
+    fontSize: 28,
+    fontWeight: '400',
+    marginBottom: 30,
+    textAlign: 'center',
+    letterSpacing: 0.5,
+  },
 });
