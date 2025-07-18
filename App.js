@@ -22,10 +22,10 @@ export default function App() {
         <Stack.Screen name="Authenticating" component={AuthenticatingScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Success" component={SuccessScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Paso" component={PasoScreen} options={{ headerShown: false }} />
-        {/*<Stack.Screen name="Dashboard" component={DashboardScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="Dashboard" component={DashboardScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="ReportesXUsuario" component={ReportesXUsuario} options={{ headerShown: false }}/>
         <Stack.Screen name="ReproduccionLavados" component={ReproduccionLavados} options={{ headerShown: false }}/>
-        <Stack.Screen name="ABMUsuarios" component={ABMUsuarios} options={{ headerShown: false }}/>  */}
+     {/*   <Stack.Screen name="ABMUsuarios" component={ABMUsuarios} options={{ headerShown: false }}/>  */}
       </Stack.Navigator>
     </NavigationContainer>
   );
