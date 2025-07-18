@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Animated, Dimensions, Easing, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Sidebar({ isOpen, onClose }) {
   const screenWidth = Dimensions.get('window').width;
   const sidebarWidth = Math.min(screenWidth * 0.8, 350);
+  const navigation = useNavigation()
 
   const slideAnim = React.useRef(new Animated.Value(screenWidth)).current;
 
@@ -51,11 +53,13 @@ export default function Sidebar({ isOpen, onClose }) {
           </TouchableOpacity>
         </View>
         <View style={styles.menu}>
-          <TouchableOpacity style={styles.menuItem}><Text style={styles.itemText}>Dashboard</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}><Text style={styles.itemText}>ABM Usuarios</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}><Text style={styles.itemText}>Reproducción de lavados</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}><Text style={styles.itemText}>Reportes por usuario</Text></TouchableOpacity>
-        </View>
+          {/*
+          <TouchableOpacity style={styles.menuItem} onPress={() => { navigation.navigate('Dashboard'); onClose(); }}><Text style={styles.itemText}>Dashboard</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem} onPress={() => { navigation.navigate('ABMUsuarios'); onClose(); }}><Text style={styles.itemText}>ABM Usuarios</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem} onPress={() => { navigation.navigate('ReproduccionLavados'); onClose(); }}><Text style={styles.itemText}>Reproducción de lavados</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem} onPress={() => { navigation.navigate('ReportesXUsuario'); onClose(); }}><Text style={styles.itemText}>Reportes por usuario</Text></TouchableOpacity>
+         */}
+          </View>
         <TouchableOpacity style={styles.logoutBtn}>
           <Text style={styles.logoutText}>Cerrar Sesión</Text>
         </TouchableOpacity>

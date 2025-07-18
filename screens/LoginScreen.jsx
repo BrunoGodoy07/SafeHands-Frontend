@@ -4,14 +4,16 @@ import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import LoginCard from '../components/LoginCard';
 import QRLoginCard from '../components/QRLoginCard';
+import { useNavigation } from '@react-navigation/native';
 
-export default function LoginScreen() {
+export default function LoginScreen () {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const navigation = useNavigation()
 
   return (
     <SafeAreaView style={styles.container}>
       <Navbar onMenuPress={() => setSidebarOpen(true)} />
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} navigation={navigation} />
       <View style={styles.centerBox}>
         <Text style={styles.mainTitle}>Inicio de sesión</Text>
         <View style={styles.loginRow}>
